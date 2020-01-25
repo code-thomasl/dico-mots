@@ -1,13 +1,17 @@
 import React from 'react'
 import { Spinner, Card, CardBody, CardImg, CardTitle, CardText, CardSubtitle, Button } from 'reactstrap'
+import { useTranslation } from 'react-i18next';
+
 
 export default function AboutPage() {
+    const { t, i18n } = useTranslation();
+
     return (
         <div>
             <Card>
                 <CardBody>
-                    <CardTitle>About this website</CardTitle>
-                    <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
+                    <CardTitle>{t('About.2')}</CardTitle>
+                    <CardText>{t('About.3')}</CardText>
                 </CardBody>
             </Card>
         </div>

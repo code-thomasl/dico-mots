@@ -45,3 +45,39 @@
 .about-github {
   text-align: right;
 }
+
+.auto-form {
+  width: 100%;
+
+  input {
+    width: 100%;
+    border: none;
+    font-size: 14px;
+    padding: 10px 5px;
+    box-sizing: border-box;
+  }
+}
+
+.auto-form ul::before {
+  content: "";
+}
+
+.auto-form ul {
+  list-style-type: none;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid grey;
+  background: rgb(53, 53, 53);
+}
+
+.auto-form li {
+  padding: 10px 5px;
+  cursor: pointer;
+}
+
+.auto-form li:hover {
+  text-decoration: underline;
+  background-color: rgba(128,128,128, 0.20);
+}
+

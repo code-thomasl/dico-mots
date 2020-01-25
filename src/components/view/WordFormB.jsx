@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import JResults from './JResults';
 import { Form, Label, Input, Button, FormGroup } from 'reactstrap';
+import words from '../controller/words.json';
 
 const initialState = {
     //value: '',
@@ -16,11 +17,48 @@ export default class WordFormB extends React.Component {
         value: '',
         valueError: '', 
         answer: '',
-        history: []
+        history: [],
+        suggestions: [],
+        text: ''
     };
+
+    this.items = words;
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    onTextChanged = (event) => {
+        this.setState({value: event.target.value});
+        console.log(event.target.value);
+
+        const value = event.target.value;
+        let suggestions = [];
+        if(value.length > 0) {
+                const regex = new RegExp(`^${value}`, 'i');
+                suggestions = this.items.sort().filter(v => regex.test(v));
+        }
+        this.setState(() => ({ suggestions, text: value }));
+    }
+
+    suggestionSelected (value) 
+    {
+        this.setState(() =>({
+            text: value,
+            suggestions: [],
+        }))
+    }
+
+    renderSuggestions() {
+        const { suggestions } = this.state;
+        if(suggestions.length === 0) {
+            return null;
+        }
+        return (
+            <ul>
+                {suggestions.map((item) => <li onClick={() => this.suggestionSelected(item)}>{item}</li>)}
+            </ul>
+        );
     }
 
     onAddItem = () => {
@@ -36,6 +74,7 @@ export default class WordFormB extends React.Component {
 
     handleChange(event) {
         this.setState({value: event.target.value});
+        console.log(event.target.value);
     }
 
     validate = () => {
@@ -70,7 +109,7 @@ export default class WordFormB extends React.Component {
         //console.log(this.state);
 
         var self = this;
-        axios.post('http://localhost:5000/sendform', this.state.value, {headers: { 'Content-Type': 'text/plain' }})
+        axios.post('http://localhost:5000/sendform', this.state.text, {headers: { 'Content-Type': 'text/plain' }})
         .then(function(response){
             console.log('---')
             console.log(response);
@@ -90,12 +129,12 @@ export default class WordFormB extends React.Component {
         event.preventDefault();
         axios.get('http://localhost:5000/randomize')
         .then((response) => {
-            const value = response.data;
+            const text = response.data;
             console.log('---')
             console.log(response.data);
 
             //this.setState({ value });
-            this.setState({value: response.data});
+            this.setState({text: response.data});
             
             //self.setState({ value: response.data });
             //Perform action based on response
@@ -114,12 +153,14 @@ export default class WordFormB extends React.Component {
     }
 
 render() {
+    const { text } = this.state;
     return (
     <>
-        <Form onSubmit={this.handleSubmit}>
-        <FormGroup>
+        <Form onSubmit={this.handleSubmit} className="auto-form-wrapper">
+        <FormGroup className="auto-form">
             <Label>Donner un mot:</Label>
-            <Input type="text" value={this.state.value} onChange={this.handleChange} required />
+            <Input type="text" value={text} onChange={this.onTextChanged} required />
+            {this.renderSuggestions()}
             <div style={{color: "red"}}>
                 {this.state.valueError}
             </div>
@@ -129,7 +170,7 @@ render() {
             <Button type="submit" value="Submit" color="dark">Submit</Button>
         </FormGroup>
         </Form>
-        <JResults word={this.state.value} definition={this.state.answer} />
+        <JResults /*word={this.state.value}*/ definition={this.state.answer} />
     </>
     );
     }

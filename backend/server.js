@@ -7,13 +7,31 @@ const fetch = require('node-fetch');
 var iconv = require('iconv-lite');
 const bodyParser = require('body-parser');
 const path = require('path');
+const ejs = require('ejs');
 
 require('dotenv').config();
+
 
 // Create Express server
 const app = express();
 app.use(bodyParser.json()); 
 const port = process.env.PORT || 5000;
+let datastream;
+
+/*
+var allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Origin', "http://localhost:3000");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+}
+
+app.configure(function() {
+  app.use(allowCrossDomain);
+  //some other code
+}); 
+*/   
 
 const storeData = (data, path) => {
   try {
@@ -33,18 +51,31 @@ const loadData = (path) => {
   }
 }
 
+const displayData = (data) => {
+  try {
+    return data;
+
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function executeAsynchronously(functions, timeout) {
+  for(var i = 0; i < functions.length; i++) {
+    setTimeout(functions[i], timeout);
+  }
+}
+
 const randomWord = (length, file) => {
   let words = loadData()
 }
 
-
-app.use(cors());
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({
 //  extended: true
@@ -54,6 +85,25 @@ app.use(cors());
 
 app.use(express.urlencoded())
 app.use(bodyParser.text());
+
+app.use(cors());
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Acces-Control-Allow-Headers", 
+  "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if(req.method === "OPTIONS")
+  {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+});
+
+const corsOptions = {
+  origin: 'http://localhost:3000'
+}
 
 if(process.env.NODE_ENV === 'production')
 {
@@ -83,6 +133,7 @@ const usersRouter = require('./routes/users');
 app.use('/exercises', exercisesRouter);
 app.use('/users', usersRouter);
 
+
 app.get('/randomize', (req, res) => {
   console.log(req.body);
   let word = loadData('./words-list.json');
@@ -104,12 +155,14 @@ app.get('/randomize', (req, res) => {
   res.end()
 });
 
-app.post('/sendform', (req, res) => {
+app.post('/sendform', async (req, res) => {
   const word = req.body;
   console.log(req.body);
   console.log(`OK SOMETHING HAPPENING HERE`);
   console.log(`Response from the form : ${word}`);
   console.log(word);
+  res.set('Content-Type', 'text/html');
+
 
   if(fs.existsSync(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`)) {
     console.log('File already exists!');
@@ -117,14 +170,20 @@ app.post('/sendform', (req, res) => {
 
   } else {
     console.log("File doesn't exist");
-    fetchWordFromDist(word)
+    
+    console.log('REPONSE DEBUT');
+    //fetchWordFromDist(word);  
+    await allInFetch(word, res);
+    console.log('REPONSE FIN');
 
-    res.send('Please click SUBMIT to display');
+    //res.send('Please click the Submit button to display result for : '+ word);
+    
+    //res.send('Please click SUBMIT to display');
+
     //res.send(word);
     //res.send(loadData(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`));
   }
 
-  res.end()
 });
 
 app.listen(port, () => {
@@ -157,6 +216,56 @@ fetch(url)
   });
 */
 
+
+
+function parseWordFromDist(word) {
+    const url = `http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=${word}`
+  
+    return fetch(url)
+    .then(res => res.arrayBuffer())
+    .then(arrayBuffer => iconv.decode(new Buffer(arrayBuffer), 'iso-8859-1').toString())
+    .then(converted => {
+      const $ = cheerio.load(converted, { decodeEntities: false });
+      //storeData($("CODE").html(), `/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
+      //storeData($("CODE").text(), `/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
+      let def = /<def>(.|\n)*?<\/def>/gm;
+      let rele = /(\d)/gm;
+      let rels = /(\d)/gm;
+
+      return $("CODE").html();
+      //console.log(converted)
+    })
+    .then(response => {
+      datastream = response;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
+
+const allInFetch = (word, res) => {
+  const url = `http://www.jeuxdemots.org/rezo-dump.php?gotermsubmit=Chercher&gotermrel=${word}`
+
+  fetch(url)
+  .then(res => res.arrayBuffer())
+  .then(arrayBuffer => iconv.decode(new Buffer(arrayBuffer), 'iso-8859-1').toString())
+  .then(converted => {
+    const $ = cheerio.load(converted, { decodeEntities: false });
+    storeData($("CODE").html(), `/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
+    //storeData($("ClODE").text(), `/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
+
+    return `/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`
+    //console.log(converted)
+  })
+  .then(response => res.send(parseFileSendProper(response)))
+  .catch(error => {
+    console.log(error);
+  });
+
+
+  //parseFileSendProper(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
+}
+
 // Fetch the correct word from distant dump server and store the data in a file
 // @TODOS
 // - Check if file doesn't already exists for the specific word
@@ -170,18 +279,36 @@ const fetchWordFromDist = (word) => {
   .then(arrayBuffer => iconv.decode(new Buffer(arrayBuffer), 'iso-8859-1').toString())
   .then(converted => {
     const $ = cheerio.load(converted, { decodeEntities: false });
-    storeData($("CODE").text(), `/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
+    storeData($("CODE").html(), `/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
+    //storeData($("CODE").text(), `/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
 
+    
     //console.log(converted)
-  }).catch(error => {
+  })
+  .catch(error => {
     console.log(error);
   });
 }
 
+//maybe send back result as html with templating ?
 const parseFileSendProper = (file) => {
   let data = loadData(file);
 
-  data = JSON.parse(data);
+  let def = /<def>(.|\n)*?<\/def>/gm;
+  let rele = /;'([^;]*)';/gm;
+  let rels = /(\d)/gm;
 
-  return data;
+  data = JSON.parse(data);
+  var result = 'Définitions<br />';
+  result += data.match(def);
+  result += '<hr />';
+
+  result = 'Relations<br />';
+  result += data.match(rele);
+  result += '<hr />';
+  result += data.match(rels);
+
+  console.log("file has been parsed and sent")
+  console.log(result);
+  return result;
 }

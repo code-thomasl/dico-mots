@@ -1,5 +1,10 @@
 {
     "About": {
-        "1": "About"
+        "1": "About",
+        "2": "About page title",
+        "3": "About page content"
+    },
+    "Footer": {
+        "1": "Dic o mots Project"
     }
 }
