@@ -16,7 +16,9 @@ require('dotenv').config();
 const app = express();
 app.use(bodyParser.json()); 
 const port = process.env.PORT || 5000;
+const REDIS_PORT = process.env.PORT || 6379;
 let datastream;
+
 
 /*
 var allowCrossDomain = function(req, res, next) {
@@ -74,6 +76,26 @@ function executeAsynchronously(functions, timeout) {
 
 const randomWord = (length, file) => {
   let words = loadData()
+}
+
+// Cache middleware
+function cache(req, res, next) {
+  const { word } = req.params;
+
+  client.get(word, (err, data) => {
+    if(err) throw err;
+
+    if(data !== null) {
+      res.send(setResponse(word, data));
+    } else {
+      next();
+    }
+  })
+}
+
+// Set response
+function setResponse(word, wordData) {
+  return wordData;
 }
 
 //app.use(bodyParser.json());
@@ -166,6 +188,10 @@ app.post('/sendform', async (req, res) => {
 
   if(fs.existsSync(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`)) {
     console.log('File already exists!');
+
+    //Set data to Redis
+    client.setx(word, 3600, parseFileSendProper(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`))
+
     res.send(parseFileSendProper(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`));
 
   } else {
@@ -266,6 +292,16 @@ const allInFetch = (word, res) => {
   //parseFileSendProper(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`);
 }
 
+function getMatches(string, regex, index) {
+  index || (index = 1); // default to the first capturing group
+  var matches = [];
+  var match;
+  while (match = regex.exec(string)) {
+    matches.push(match[index]);
+  }
+  return matches;
+}
+
 // Fetch the correct word from distant dump server and store the data in a file
 // @TODOS
 // - Check if file doesn't already exists for the specific word
@@ -296,17 +332,23 @@ const parseFileSendProper = (file) => {
 
   let def = /<def>(.|\n)*?<\/def>/gm;
   let rele = /;'([^;]*)';/gm;
-  let rels = /(\d)/gm;
+
 
   data = JSON.parse(data);
-  var result = 'Définitions<br />';
+  var result = '<strong>Définitions</strong><br />';
   result += data.match(def);
   result += '<hr />';
 
-  result = 'Relations<br />';
-  result += data.match(rele);
+  result += '<strong>Relations</strong>';
+  result += '<br />';
+  result += '<br />';
+
+
+  var matches = getMatches(data, rele, 1);
+
+
+  result += matches;
   result += '<hr />';
-  result += data.match(rels);
 
   console.log("file has been parsed and sent")
   console.log(result);
