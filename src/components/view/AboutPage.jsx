@@ -1,16 +1,18 @@
 import React from 'react'
-import { Spinner, Card, CardBody, CardImg, CardTitle, CardText, CardSubtitle, Button } from 'reactstrap'
+import {Card, CardBody, CardImg, CardTitle, CardText} from 'reactstrap'
 import { useTranslation } from 'react-i18next';
+import LogosCardImg from '../../logo_card_img.png'
 
 
 export default function AboutPage() {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <div>
             <Card>
                 <CardBody>
-                    <CardTitle>{t('About.2')}</CardTitle>
+                    <CardImg top src={LogosCardImg} alt="Card image cap" />
+                    <CardTitle>{t('About.2')}</CardTitle>                             
                     <CardText>{t('About.3')}</CardText>
                 </CardBody>
             </Card>

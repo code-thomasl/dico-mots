@@ -1,8 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import JResults from './JResults';
-import { Form, Label, Input, Button, FormGroup } from 'reactstrap';
+import { Form, Label, Input, Button, FormGroup, Spinner } from 'reactstrap';
 import words from '../controller/words.json';
+import { trackPromise } from 'react-promise-tracker';
+import { withTranslation } from 'react-i18next';
+
+
 
 const initialState = {
     //value: '',
@@ -10,7 +14,7 @@ const initialState = {
     answer: ''
 };
 
-export default class WordFormB extends React.Component {
+class WordFormB extends React.Component {
     constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +23,8 @@ export default class WordFormB extends React.Component {
         answer: '',
         history: [],
         suggestions: [],
-        text: ''
+        text: '',
+        loading: false
     };
 
     this.items = words;
@@ -59,6 +64,17 @@ export default class WordFormB extends React.Component {
                 {suggestions.map((item) => <li onClick={() => this.suggestionSelected(item)}>{item}</li>)}
             </ul>
         );
+    }
+
+    renderLoading() {
+        if(this.state.answer != null) {
+            return null;
+        }
+        return (
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        )
     }
 
     onAddItem = () => {
@@ -109,6 +125,7 @@ export default class WordFormB extends React.Component {
         //console.log(this.state);
 
         var self = this;
+        trackPromise(
         axios.post('http://localhost:5000/sendform', this.state.text, {headers: { 'Content-Type': 'text/plain' }})
         .then(function(response){
             console.log('---')
@@ -121,7 +138,7 @@ export default class WordFormB extends React.Component {
         .catch(function(error){
             console.log(error);
             //Perform action based on error
-        });
+        }));
     }
 
     //@TODO Input random word into form field
@@ -154,11 +171,15 @@ export default class WordFormB extends React.Component {
 
 render() {
     const { text } = this.state;
+    const { t } = this.props;
+
+
+
     return (
     <>
         <Form onSubmit={this.handleSubmit} className="auto-form-wrapper">
         <FormGroup className="auto-form">
-            <Label>Donner un mot:</Label>
+            <Label>{t('GiveWord.1')}</Label>
             <Input type="text" value={text} onChange={this.onTextChanged} required />
             {this.renderSuggestions()}
             <div style={{color: "red"}}>
@@ -166,8 +187,9 @@ render() {
             </div>
         </FormGroup>
         <FormGroup>
-            <Button type="button" onClick={this.handleRandomize} value="Randomize" color="info"><i className="fas fa-random"></i>Randomize</Button>
-            <Button type="submit" value="Submit" color="dark">Submit</Button>
+            <Button type="button" onClick={this.handleRandomize} value="Randomize" color="info"><i className="fas fa-random"></i>{t('Randomize.1')}</Button>
+            <Button type="submit" value="Submit" color="dark">{t('Submit.1')}</Button>
+            {this.renderLoading()}
         </FormGroup>
         </Form>
         <JResults /*word={this.state.value}*/ definition={this.state.answer} />
@@ -175,3 +197,5 @@ render() {
     );
     }
 }
+
+export default withTranslation()(WordFormB)

@@ -1,5 +1,36 @@
 {
     "About": {
-        "1": "A proposito"
+        "1": "A proposito",
+        "2": "A cerca de Dico Mots",
+        "3": "Dico mots es un proyecto universitario realizado para el master II AIGLE. Su objetivo es mostrar y almacenar las diferentes palabras que puede encontrar en JeuxDeMots."
+    },
+    "Footer": {
+        "1": "Proyecto Dico mots"
+    },
+    "Language": {
+        "1": "Idioma",
+        "2": "Inglès",
+        "3": "Francés",
+        "4": "Español",
+        "5": "Italiano",
+        "6": "Chino mandarín"
+    },
+    "Options": {
+        "1": "Opciones"
+    },
+    "ChangeOrder": {
+        "1": "Cambia el orden"
+    },
+    "Reset": {
+        "1": "Reiniciar"
+    },
+    "GiveWord": {
+        "1": "Dar una palabra"
+    },
+    "Submit": {
+        "1": "Enviar"
+    },
+    "Randomize": {
+        "1": "Aleatorio"
     }
 }

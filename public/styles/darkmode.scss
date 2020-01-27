@@ -2,7 +2,16 @@
         background-color: #fff;
         color: #333;
         transition: background-color 0.3s ease;
+
+        .auto-form ul {
+            background: bisque;
+        }
+
+        .form-control {
+            border: 1px solid rgba(0,0,0,.125)
+        }
     }
+
     
     body.dark-mode {
         background-color: #25547e;
@@ -107,4 +116,4 @@
         background-color: #f6f6f6;
         top: 1px;
         }
-    } 
+    }

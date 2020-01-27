@@ -1,10 +1,36 @@
 {
     "About": {
         "1": "About",
-        "2": "About page title",
-        "3": "About page content"
+        "2": "About Dico mots",
+        "3": "Dico mots is a university Project  done for the master II AIGLE. It's goal is to display and store the different words you can find in JeuxDeMots."
     },
     "Footer": {
-        "1": "Dic o mots Project"
+        "1": "Dico mots Project"
+    },
+    "Language": {
+        "1": "Language",
+        "2": "English",
+        "3": "French",
+        "4": "Spanish",
+        "5": "Italian",
+        "6": "Mandarin Chinese"
+    },
+    "Options": {
+        "1": "Options"
+    },
+    "ChangeOrder": {
+        "1": "Change Order"
+    },
+    "Reset": {
+        "1": "Reset"
+    },
+    "GiveWord": {
+        "1": "Give a word"
+    },
+    "Submit": {
+        "1": "Submit"
+    },
+    "Randomize": {
+        "1": "Randomize"
     }
 }

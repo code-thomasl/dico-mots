@@ -29,7 +29,7 @@ const JNavBar = (props) => {
   return (
     <div>
       <Navbar color="dark" dark expand="md">
-        <NavbarBrand tag={Link} to="/">Dic o mots</NavbarBrand>
+        <NavbarBrand tag={Link} to="/">Dico mots</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -38,37 +38,37 @@ const JNavBar = (props) => {
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
-                Options
+              {t('Options.1')}
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem>
-                  Changer l'ordre
+                {t('ChangeOrder.1')}
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
-                  Reset
+                {t('Reset.1')}
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
-                <i className="fas fa-globe-europe"></i> Langue
+                <i className="fas fa-globe-europe"></i>{t('Language.1')}
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem onClick={()=>handleClick('en')}>
-                  English
+                {t('Language.2')}
                 </DropdownItem>
                 <DropdownItem onClick={()=>handleClick('fr')}>
-                  French
+                {t('Language.3')}
                 </DropdownItem>
                 <DropdownItem onClick={()=>handleClick('es')}>
-                  Spanish
+                {t('Language.4')}
                 </DropdownItem>
                 <DropdownItem onClick={()=>handleClick('it')}>
-                  Italian
+                {t('Language.5')}
                 </DropdownItem>
                 <DropdownItem  onClick={()=>handleClick('zh-CN')}>
-                  Mandarin Chinese
+                {t('Language.6')}
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

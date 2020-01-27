@@ -1,5 +1,36 @@
 {
     "About": {
-        "1": "A propos"
+        "1": "A propos",
+        "2": "A propos de Dico mots",
+        "3": "Dico mots est un projet universitaire réalisé dans le cadre du master II AIGLE. Il a pour but d'afficher et de répértorier les différents mots et relations de JeuxDeMots"
+    },    
+    "Footer": {
+        "1": "Projet Dico mots"
+    },
+    "Language": {
+        "1": "Langage",
+        "2": "Anglais",
+        "3": "Français",
+        "4": "Espagnol",
+        "5": "Italien",
+        "6": "Mandarin"
+    },
+    "Options": {
+        "1": "Options"
+    },
+    "ChangeOrder": {
+        "1": "Changer l'ordre"
+    },
+    "Reset": {
+        "1": "Reset"
+    },
+    "GiveWord": {
+        "1": "Donner un mot"
+    },
+    "Submit": {
+        "1": "Envoyer"
+    },
+    "Randomize": {
+        "1": "Aléatoire"
     }
 }

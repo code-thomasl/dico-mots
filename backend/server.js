@@ -79,6 +79,7 @@ const randomWord = (length, file) => {
 }
 
 // Cache middleware
+/*
 function cache(req, res, next) {
   const { word } = req.params;
 
@@ -92,6 +93,7 @@ function cache(req, res, next) {
     }
   })
 }
+*/
 
 // Set response
 function setResponse(word, wordData) {
@@ -190,7 +192,7 @@ app.post('/sendform', async (req, res) => {
     console.log('File already exists!');
 
     //Set data to Redis
-    client.setx(word, 3600, parseFileSendProper(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`))
+    //client.setx(word, 3600, parseFileSendProper(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`))
 
     res.send(parseFileSendProper(`/Users/thomaslefebvre/git/projet-jeudemot/backend/words_files/${word}.json`));
 

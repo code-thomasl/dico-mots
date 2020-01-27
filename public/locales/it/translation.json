@@ -1,5 +1,36 @@
 {
     "About": {
-        "1": "Pagina Informazioni "
+        "1": "Pagina Informazioni ",
+        "2": "A proposito di",
+        "3": "Dico è un progetto universitario relazionato nel quadro del maestro II AIGLE. L'affermazione e l'affidabilità dei diversi motivi e relazioni di JeuxDeMots"        
+    },
+    "Footer": {
+        "1": "Progetto Dico mots"
+    },
+    "Language": {
+        "1": "Linguaggio",
+        "2": "Inglese",
+        "3": "Francese",
+        "4": "Spagnolo",
+        "5": "Italiano",
+        "6": "Cinese Mandarino"
+    },
+    "Options": {
+        "1": "Opzioni"
+    },
+    "ChangeOrder": {
+        "1": "Cambiare ordine"
+    },
+    "Reset": {
+        "1": "Reset"
+    },
+    "GiveWord": {
+        "1": "Dai una parola"
+    },
+    "Submit": {
+        "1": "Invia"
+    },
+    "Randomize": {
+        "1": "Casuale"
     }
 }
