@@ -20,6 +20,25 @@ const REDIS_PORT = process.env.PORT || 6379;
 let datastream;
 
 
+app.use(cors());
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Acces-Control-Allow-Headers", 
+  "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if(req.method === "OPTIONS")
+  {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+});
+
+const corsOptions = {
+  origin: 'http://localhost:3000'
+}
+
 /*
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', "*");
@@ -110,24 +129,7 @@ function setResponse(word, wordData) {
 app.use(express.urlencoded())
 app.use(bodyParser.text());
 
-app.use(cors());
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Acces-Control-Allow-Headers", 
-  "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  if(req.method === "OPTIONS")
-  {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-    return res.status(200).json({});
-  }
-  next();
-});
-
-const corsOptions = {
-  origin: 'http://localhost:3000'
-}
 
 if(process.env.NODE_ENV === 'production')
 {
