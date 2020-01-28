@@ -126,7 +126,7 @@ class WordFormB extends React.Component {
 
         var self = this;
         trackPromise(
-        axios.post('http://localhost:5000/sendform', this.state.text, {headers: { 'Content-Type': 'text/plain' }})
+        axios.post('/sendform', this.state.text, {headers: { 'Content-Type': 'text/plain' }})
         .then(function(response){
             console.log('---')
             console.log(response);
@@ -144,7 +144,7 @@ class WordFormB extends React.Component {
     //@TODO Input random word into form field
     handleRandomize = (event) => {
         event.preventDefault();
-        axios.get('http://localhost:5000/randomize')
+        axios.get('/randomize')
         .then((response) => {
             const text = response.data;
             console.log('---')
