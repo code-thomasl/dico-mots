@@ -161,10 +161,10 @@ app.use('/users', usersRouter);
 
 
 app.get('/randomize', (req, res) => {
-  console.log(req.body);
-  let word = loadData('./words-list.json');
+  let word = loadData('words-list.json');
 
   word = JSON.parse(word);
+  console.log(word);
   //res.send(word[word.length-1]);
   res.send(word[getRandomInt(0, word.length-1)]);
 /*
