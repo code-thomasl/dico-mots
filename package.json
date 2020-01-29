@@ -1,49 +1,30 @@
 {
-  "name": "mern-exercice-tracker",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
-    "axios": "^0.19.1",
-    "bootstrap": "^4.4.1",
-    "font-awesome": "^4.7.0",
-    "i18next": "^19.0.3",
-    "i18next-browser-languagedetector": "^4.0.1",
-    "i18next-xhr-backend": "^3.2.2",
-    "node-sass": "^4.13.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-html-parser": "^2.0.2",
-    "react-i18next": "^11.3.1",
-    "react-loader-spinner": "^3.1.5",
-    "react-promise-tracker": "^2.0.5",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0",
-    "reactstrap": "^8.3.2",
-    "styled-components": "^4.4.1",
-    "use-dark-mode": "^2.3.1"
-  },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server \" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "iconv": "^2.3.5",
+    "iconv-lite": "^0.5.0",
+    "mongoose": "^5.8.9",
+    "node-fetch": "^2.6.0"
   }
 }
