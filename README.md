@@ -22,7 +22,7 @@ If you are trying to access the website and the link appear to be broken, it's p
 - randomize button, gives a random words from the most popular words of the french language
 - responsive UI
 - time responsive answers
-- choice of languages for the interface
+- choice of language for the interface (currently between french, english, spanish, italian and mandarin chinese)
 - dark/light theme
 - extensive documentation
 
