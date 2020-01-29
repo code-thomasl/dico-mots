@@ -148,7 +148,7 @@ class WordFormB extends React.Component {
         .then((response) => {
             const text = response.data;
             console.log('---')
-            console.log(response.data);
+            console.log(response);
 
             //this.setState({ value });
             this.setState({text: response.data});
